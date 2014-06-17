@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.Insets;
+import java.awt.ScrollPane;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -57,13 +58,16 @@ public class TextEditorFrame extends JFrame implements View {
 		menuBar.add(fileMenu);
 
 		JPanel container = new JPanel();
+		container.setLayout(new BorderLayout());
 		container.add(linesIndicator, BorderLayout.WEST);
 		container.add(mainTextPane, BorderLayout.CENTER);
+		container.setBackground(LOOPS);
 		JScrollPane scrollPane = new JScrollPane(container);
+		container.setPreferredSize(scrollPane.getPreferredSize());
 		//scrollPane.add(mainTextPane);
 		//scrollPane.add(linesIndicator);
 		add(menuBar, BorderLayout.NORTH);
-		add(container, BorderLayout.CENTER);
+		add(scrollPane, BorderLayout.CENTER);
 	}
 
 	private void setUpCompsProperties() {
