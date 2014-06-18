@@ -11,7 +11,7 @@ import java.util.List;
 import com.texteditor.api.Model;
 
 public class ModelImpl implements Model {
-	private File openedFile;
+	//private File openedFile;
 
 	// private Map<String, Color> specificElementColor = new HashMap<>();
 
@@ -25,7 +25,7 @@ public class ModelImpl implements Model {
 		// bisonach,
 		// parserach etc
 		// System.out.println(fileName);
-		openedFile = file;
+		// openedFile = file;
 	}
 
 	@Override
@@ -42,24 +42,33 @@ public class ModelImpl implements Model {
 	}
 
 	@Override
-	public List<String> getErrorReport(String text) throws IOException {
-		Process proc = Runtime.getRuntime().exec("python -O ErrorCheck/main.py");
-		OutputStream os = proc.getOutputStream();
-		os.write(text.getBytes());
-		os.close();
-        BufferedReader br = new BufferedReader(
-        		new InputStreamReader(proc.getInputStream()));
-        List<String> errorReport = new ArrayList<String>();
-        String tmp = null;
-        while((tmp = br.readLine()) != null) {
-        	if(tmp.startsWith("(linia ")) {
-        		String[] splitTmp = tmp.split("\\): ");
-        		errorReport.add(Integer.parseInt(splitTmp[0].substring(7)) + ":" + splitTmp[1]);
-        	}
-        }
-        return errorReport;
+	public List<String> getErrorReport(String text) {
+		List<String> errorReport = null;
+		
+		try {
+			Process proc = Runtime.getRuntime().exec("python -O ErrorCheck/main.py");
+			OutputStream os = proc.getOutputStream();
+			os.write(text.getBytes());
+			os.close();
+			BufferedReader br = new BufferedReader(
+					new InputStreamReader(proc.getInputStream()));
+			errorReport = new ArrayList<String>();
+			String tmp = null;
+			while((tmp = br.readLine()) != null) {
+				if(tmp.startsWith("(linia ")) {
+					String[] splitTmp = tmp.split("\\): ");
+					errorReport.add(Integer.parseInt(splitTmp[0].substring(7)) + ":" + splitTmp[1]);
+				}
+			}
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+			return null;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+
+		return errorReport;
 	}
-	
-	
 
 }

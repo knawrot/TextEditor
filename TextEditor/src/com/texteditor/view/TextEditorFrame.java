@@ -4,8 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.ComponentOrientation;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Insets;
-import java.awt.ScrollPane;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,7 +14,6 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextPane;
@@ -29,7 +28,15 @@ public class TextEditorFrame extends JFrame implements View {
 	private final JMenu fileMenu = new JMenu(FILE_MENU_NAME);
 	private final Map<String, JMenuItem> fileMenuItems = new HashMap<>();
 	private final JTextArea linesIndicator = new JTextArea("1");
+	private final Font font = new Font("Arial", Font.PLAIN, 15);
 
+	/*
+	 * TODO:
+	 * 1. Co przy zamknieciu? Zapis pliku czy zlewamy? 
+	 * Tak czy inaczej plik tworzymy DOPIERO przy zapisie (bo jak wychodzi i 
+	 * zapisuje to taki plik ma nie powstac)
+	 * 2. Opcja otwarcia nowego czystego pliku (opcja "New")
+	 */
 	public TextEditorFrame() {
 		super();
 
@@ -61,9 +68,9 @@ public class TextEditorFrame extends JFrame implements View {
 		container.setLayout(new BorderLayout());
 		container.add(linesIndicator, BorderLayout.WEST);
 		container.add(mainTextPane, BorderLayout.CENTER);
-		container.setBackground(LOOPS);
 		JScrollPane scrollPane = new JScrollPane(container);
-		container.setPreferredSize(scrollPane.getPreferredSize());
+		//Dimension prefferedDimension = new Dimension(scrollPane.getPreferredSize().width-1000, scrollPane.getPreferredSize().height);
+		//container.setPreferredSize(prefferedDimension);
 		//scrollPane.add(mainTextPane);
 		//scrollPane.add(linesIndicator);
 		add(menuBar, BorderLayout.NORTH);
@@ -78,9 +85,11 @@ public class TextEditorFrame extends JFrame implements View {
 				.getPreferredSize().height));
 		linesIndicator
 				.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
-		linesIndicator.setMargin(new Insets(0, 0, 0, 5));
+		linesIndicator.setMargin(new Insets(3, 0, 0, 5));
 
-		// menuBar.setBackground(Color.);
+		Font font2 = new Font("Arial", Font.PLAIN, 16);
+		linesIndicator.setFont(font2);
+		mainTextPane.setFont(font);
 	}
 
 	@Override

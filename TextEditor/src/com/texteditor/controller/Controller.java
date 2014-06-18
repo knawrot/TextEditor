@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.MalformedURLException;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.JFileChooser;
@@ -92,7 +93,7 @@ public class Controller {
 				for (int i = 2; i < root.getElementIndex(caretPosition) + 2; i++) {
 					text += i + System.getProperty("line.separator");
 				}
-				//System.out.println(text);
+				updateErrors(view.getMainTextPane().getText());
 				return text;
 			}
 
@@ -156,4 +157,9 @@ public class Controller {
 		model.saveFileAtLocation(file);
 	}
 
+	private void updateErrors(String text){
+		List<String> result = model.getErrorReport(text);
+		//TODO: jakies przemulenie tej informacji i setowanie View
+		System.out.println(result);
+	}
 }
