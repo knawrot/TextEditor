@@ -54,10 +54,18 @@ public class ModelImpl implements Model {
 					new InputStreamReader(proc.getInputStream()));
 			errorReport = new ArrayList<String>();
 			String tmp = null;
+			String[] splitTmp = null;
 			while((tmp = br.readLine()) != null) {
 				if(tmp.startsWith("(linia ")) {
-					String[] splitTmp = tmp.split("\\): ");
+					splitTmp = tmp.split("\\): ");
 					errorReport.add(Integer.parseInt(splitTmp[0].substring(7)) + ":" + splitTmp[1]);
+				} else if(tmp.startsWith("Syntax error at line ")) {
+					splitTmp = tmp.split(" at line ");
+					splitTmp = splitTmp[1].split(", column [0-9]+: ");
+					errorReport.add(Integer.parseInt(splitTmp[0]) + ":" + 
+							"Syntax error - " + splitTmp[1]);
+				} else if(tmp.equals("At end of input")) {
+					errorReport.add("0:Syntax error");
 				}
 			}
 		} catch (NumberFormatException e) {

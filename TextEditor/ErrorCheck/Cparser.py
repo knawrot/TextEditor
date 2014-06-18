@@ -81,12 +81,15 @@ class Cparser(object):
      
      def p_instructions(self, p):
           """instructions : instructions instruction
-                              | instruction """
+                              | instruction 
+                              | """
           if len(p) > 2:
                p[0] = p[1]
                p[1].append(p[2])
-          else:
+          elif len(p) == 2:
                p[0] = [p[1]]
+          else:
+               p[0] = []
      
      
      def p_instruction(self, p):

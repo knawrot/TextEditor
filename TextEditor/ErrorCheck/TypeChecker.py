@@ -27,9 +27,11 @@ class TypeChecker:
         if __debug__: print "should",should," | ","beType", beType
         return beType == should or (beType == 'float' and should=='int')
 		
-		
-		
     def analyzeDeclarations(self, declarationsList):
+        if __debug__: print "analyzing Declarations..."
+        if declarationsList is None:
+            if __debug__: print "no declarations to analyze"
+            return
         for varList in declarationsList:
             if varList.accept(self):
                 Type = varList.typ
@@ -40,12 +42,14 @@ class TypeChecker:
                         self.raiseError(str(var.lineno)+":Podwójna deklaracja \""+var.left+"\", poprzednia deklaracja w linii"+str(self.symbolTable.get(var.left).lineno())+".")
 
     def analyzeFunDeclarations(self, declarationsList):
+        if __debug__: print "analyzing FunDeclarations..."
         for funDef in declarationsList:
             self.symbolTable.put(funDef.ident, FunctionSymbol(funDef.ident, funDef.typ, funDef.args, funDef))
             if funDef.accept(self) is None:
                 self.raiseError(str(var.lineno)+":Błędy w definicji funkcji "+funDef.ident+".")
 
     def analyzeInstrBlock(self, block):
+        if __debug__: print "analyzing InstrBlock..."
         if block.__class__.__name__ == 'CompoundInstruction':
             self.visit_CompoundInstruction(block)
         elif block.__class__.__name__ == 'list':
@@ -56,10 +60,12 @@ class TypeChecker:
             raise Exception("jakie jeszcze bloki instrukcji tu wejdą?")
 
     def analyzeInstr(self, instructionsList):
+        if __debug__: print "analyzing Instr..."
         for instr in instructionsList:
             instr.accept(self)
 
     def analyzeCondExpr(self, expr):
+        if __debug__: print "analyzing Declarations..."
         condType = expr.accept(self)
         if condType != 'int':
             self.raiseError("(linia "+str(expr.lineno)+"): Nieprawidłowy typ wyrażenia warunkowego.")
@@ -133,12 +139,9 @@ class TypeChecker:
         self.analyzeFunDeclarations(program.fundef)
         self.analyzeInstrBlock(program.instr)
 
-        if __debug__: print "symbolTable: ", self.symbolTable.currentScope
+        #if __debug__: 
+        print "symbolTable: ", self.symbolTable.currentScope
         return self.errors is 0
-
-
-		
-		
 		
     def visit_Variable(self, variable):
         if __debug__: print "visit_Variable in line",variable.lineno
@@ -204,8 +207,9 @@ class TypeChecker:
         prevTable = self.symbolTable
         self.symbolTable = SymbolTable(prevTable, "fundef("+funDef.ident+") scope")
         
-        for arg in funDef.args:
-            self.symbolTable.put(arg.ident, VariableSymbol(arg.ident, arg.typ, arg))
+        if funDef.args is not None:
+             for arg in funDef.args:
+                 self.symbolTable.put(arg.ident, VariableSymbol(arg.ident, arg.typ, arg))
         self.analyzeInstrBlock(funDef.instr)
 
         self.symbolTable = prevTable
