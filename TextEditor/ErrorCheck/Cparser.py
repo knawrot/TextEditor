@@ -102,7 +102,8 @@ class Cparser(object):
                             | return_instr
                             | break_instr
                             | continue_instr
-                            | compound_instr"""
+                            | compound_instr
+                            | funcall"""
           p[0] = p[1]
      
      
@@ -247,6 +248,11 @@ class Cparser(object):
      def p_fundef(self, p):
           """fundef : TYPE ID '(' args_list_or_empty ')' compound_instr """
           p[0] = AST.FunctionDefinition(p[1], p[2], p[4], p[6], p.lineno(1))
+          
+     def p_funcall(self, p):
+          """funcall : ID '(' expr_list_or_empty ')' ';'
+                           | ID '(' error ')' ';'"""
+          p[0] = AST.FunctionCall(p[1], p[3], p.lineno(1))  
      
      
      def p_args_list_or_empty(self, p):

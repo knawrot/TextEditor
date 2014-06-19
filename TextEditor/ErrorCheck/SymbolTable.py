@@ -9,7 +9,7 @@ class Symbol:
         return self.node.lineno
 
     def __repr__(self):
-        return self.__class__.__name__ + ", type "+str(self.type)
+        return self.__class__.__name__ + ":" + str(self.type)
 
 class ConstSymbol(Symbol):
     def __init__(self, Type, Node):
@@ -25,7 +25,7 @@ class VariableSymbol(Symbol):
         self.name = Name
 
     def __repr__(self):
-        return Symbol.__repr__(self) + ", name "+str(self.name)
+        return str(self.name) + ":" + Symbol.__repr__(self)
 
 class FunctionSymbol(VariableSymbol):
     def __init__(self, Name, Type, Args, Node):
@@ -33,7 +33,7 @@ class FunctionSymbol(VariableSymbol):
         self.args = Args
     
     def __repr__(self):
-        return Symbol.__repr__(self)
+        return str(self.name) + ":" + Symbol.__repr__(self)
 
 class SymbolTable(object):
     def __init__(self, Parent, name="nie wiem"):
@@ -43,7 +43,7 @@ class SymbolTable(object):
 
     def put(self, name, symbol):
         if __debug__: print "added name",name,"with symbol",symbol,"in scope",self.name
-        if name in self.currentScope: raise Exception("podwÃ³jna deklaracja")
+        if name in self.currentScope: raise Exception("podwójna deklaracja")
         else: self.currentScope[name] = symbol
 
     def get(self, name):

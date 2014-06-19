@@ -14,9 +14,10 @@ public class ModelImpl implements Model {
 	//private File openedFile;
 
 	// private Map<String, Color> specificElementColor = new HashMap<>();
+	private List<String> symbolTable;
 
 	public ModelImpl() {
-		// TODO inicjalizacja
+		symbolTable = new ArrayList<String>();
 	}
 
 	@Override
@@ -44,6 +45,7 @@ public class ModelImpl implements Model {
 	@Override
 	public List<String> getErrorReport(String text) {
 		List<String> errorReport = null;
+		symbolTable.clear();
 		
 		try {
 			Process proc = Runtime.getRuntime().exec("python -O ErrorCheck/main.py");
@@ -63,9 +65,14 @@ public class ModelImpl implements Model {
 					splitTmp = tmp.split(" at line ");
 					splitTmp = splitTmp[1].split(", column [0-9]+: ");
 					errorReport.add(Integer.parseInt(splitTmp[0]) + ":" + 
-							"Syntax error - " + splitTmp[1]);
+							"B³¹d sk³adniowy, niespodziewane wyst¹pienie symbolu '" + splitTmp[1].split("'")[1] + "'");
 				} else if(tmp.equals("At end of input")) {
-					errorReport.add("0:Syntax error");
+					errorReport.add("0:Niepoprawna sk³adnia programu");
+				} else if(tmp.startsWith("symbolTable")) {
+					splitTmp = tmp.split("': ");
+					for(int i = 1; i < splitTmp.length; i++) {
+						symbolTable.add(splitTmp[i].split(",")[0]);
+					}
 				}
 			}
 		} catch (NumberFormatException e) {

@@ -30,6 +30,6 @@ if __name__ == '__main__':
      	  print "Blad parsowania! Nie mozna wyswietlic drzewa."
      else:
           if tree.accept(checker):
-               print "Operacja zakoÅ„czona powodzeniem."
+               print "Operacja zakoñczona powodzeniem."
           else:
-               print "Wykryto bÅ‚Ä™dy."
+               print "Wykryto b³êdy."

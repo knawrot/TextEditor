@@ -39,14 +39,14 @@ class TypeChecker:
                     try:
                         self.symbolTable.put(var.left, VariableSymbol(var.left, Type, var))
                     except Exception:
-                        self.raiseError(str(var.lineno)+":Podw√≥jna deklaracja \""+var.left+"\", poprzednia deklaracja w linii"+str(self.symbolTable.get(var.left).lineno())+".")
+                        self.raiseError(str(var.lineno)+":PodwÛjna deklaracja \""+var.left+"\", poprzednia deklaracja w linii"+str(self.symbolTable.get(var.left).lineno())+".")
 
     def analyzeFunDeclarations(self, declarationsList):
         if __debug__: print "analyzing FunDeclarations..."
         for funDef in declarationsList:
             self.symbolTable.put(funDef.ident, FunctionSymbol(funDef.ident, funDef.typ, funDef.args, funDef))
             if funDef.accept(self) is None:
-                self.raiseError(str(var.lineno)+":B≈Çƒôdy w definicji funkcji "+funDef.ident+".")
+                self.raiseError(str(var.lineno)+":B≥Ídy w definicji funkcji "+funDef.ident+".")
 
     def analyzeInstrBlock(self, block):
         if __debug__: print "analyzing InstrBlock..."
@@ -57,7 +57,7 @@ class TypeChecker:
         elif isinstance(block,Node):
             block.accept(self)
         else:
-            raise Exception("jakie jeszcze bloki instrukcji tu wejdƒÖ?")
+            raise Exception("jakie jeszcze bloki instrukcji tu wejdπ?")
 
     def analyzeInstr(self, instructionsList):
         if __debug__: print "analyzing Instr..."
@@ -68,7 +68,7 @@ class TypeChecker:
         if __debug__: print "analyzing Declarations..."
         condType = expr.accept(self)
         if condType != 'int':
-            self.raiseError("(linia "+str(expr.lineno)+"): Nieprawid≈Çowy typ wyra≈ºenia warunkowego.")
+            self.raiseError("(linia "+str(expr.lineno)+"): Nieprawid≥owy typ wyraøenia warunkowego.")
     
     def visit_BinExpr(self, node):
         if __debug__: print "visiting BinExpr in line",node.lineno
@@ -82,23 +82,23 @@ class TypeChecker:
         if rightType is not None and leftType is not None:
             Type = self.operationsTable.getOperationType(op,leftType,rightType)
             if Type is None:
-                self.raiseError("(linia "+str(node.lineno)+"): Nieobs≈Çugiwana operacja " +leftType+" "+op+" "+rightType+".")
+                self.raiseError("(linia "+str(node.lineno)+"): Nieobs≥ugiwana operacja " +leftType+" "+op+" "+rightType+".")
             return Type
 
 
     def visit_Assignment(self, assInstr):
         if __debug__: print "visit_Assignment in line",assInstr.lineno
         if assInstr.left.__class__.__name__ != 'str':
-            self.raiseError("(linia "+str(assInstr.lineno)+"): Lewa strona przypisania musi byƒá identyfikatorem.")
+            self.raiseError("(linia "+str(assInstr.lineno)+"): Lewa strona przypisania musi byÊ identyfikatorem.")
         leftType = self.symbolTable.get(assInstr.left).type
         rightType = self.acceptOrVar(assInstr.right)
         if leftType is None:
-            self.raiseError("(linia "+str(assInstr.lineno)+"): U≈ºyto niezadeklarowanej nazwy "+assInstr.left+".")
+            self.raiseError("(linia "+str(assInstr.lineno)+"): Uøyto niezadeklarowanej nazwy "+assInstr.left+".")
         if rightType is None:
-            self.raiseError("(linia "+str(assInstr.lineno)+"): Nie rozpoznano typu warto≈õci przypisywanej.")
+            self.raiseError("(linia "+str(assInstr.lineno)+"): Nie rozpoznano typu wartoúci przypisywanej.")
         if rightType is not None and leftType is not None:
             if not TypeChecker.typesCoherent(should=rightType,beType=leftType):
-                self.raiseError("(linia "+str(assInstr.lineno)+"): Nieprawid≈Çowy typ warto≈õci przypisywanej, wymagany "+leftType+", znaleziony "+rightType+".")
+                self.raiseError("(linia "+str(assInstr.lineno)+"): Nieprawid≥owy typ wartoúci przypisywanej, wymagany "+leftType+", znaleziony "+rightType+".")
 
 
     def visit_CompoundInstruction(self, compInstr):
@@ -126,9 +126,9 @@ class TypeChecker:
         type2 = self.acceptOrVar(node.right)
         op = node.op 
         if type1 is None:
-            self.raiseError("(linia "+str(node.lineno)+"): Typ wyra≈ºenia po lewej nie rozpoznawalny.")
+            self.raiseError("(linia "+str(node.lineno)+"): Typ wyraøenia po lewej nie rozpoznawalny.")
         if type2 is None:
-            self.raiseError("(linia "+str(node.lineno)+"): Typ wyra≈ºenia po prawej nie rozpoznawalny.")
+            self.raiseError("(linia "+str(node.lineno)+"): Typ wyraøenia po prawej nie rozpoznawalny.")
         return self.operationsTable.getOperationType(op,type1,type2)
 
     def visit_Program(self, program):
@@ -188,7 +188,7 @@ class TypeChecker:
             defType = left.accept(self)
             callType = self.acceptOrVar(right)
             if not TypeChecker.typesCoherent(should=callType, beType=defType):
-                self.raiseError("(linia "+str(FunctionCall.lineno)+"): Niew≈Ça≈õciwy typ parametru, wymagany "+defType+", znaleziony "+callType+".")
+                self.raiseError("(linia "+str(FunctionCall.lineno)+"): Niew≥aúciwy typ parametru, wymagany "+defType+", znaleziony "+callType+".")
         return funDef.type
             
 

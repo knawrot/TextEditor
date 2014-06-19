@@ -45,7 +45,7 @@ class OperationsTable:
         if not right in self.type[op][left]: 
             self.type[op][left][right] = result
         else: 
-            raise Error("ju≈º istnieje")
+            raise Error("juø istnieje")
 
     def getOperationType(self, op, left, right):
         if op not in self.type: return None
