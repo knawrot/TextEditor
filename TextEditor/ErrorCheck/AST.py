@@ -186,9 +186,9 @@ class Return(Node):
           self.value = value
           self.lineno = lineno
           
-class String(Const):
+class Char(Const):
      def __init__(self, value, lineno):
-          Const(value, "STRING", lineno)
+          Const(value, "CHAR", lineno)
           self.lineno = lineno
 
 class Variable(Node):

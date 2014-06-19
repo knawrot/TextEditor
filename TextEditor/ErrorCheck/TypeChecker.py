@@ -163,9 +163,9 @@ class TypeChecker:
         if __debug__: print "visit_Integer in line",var.lineno
         return 'int'
 
-    def visit_String(self, var):
+    def visit_Char(self, var):
         if __debug__: print "visit_String in line",var.lineno
-        return 'string'
+        return 'char'
 
 
     def visit_Print(self, instr):

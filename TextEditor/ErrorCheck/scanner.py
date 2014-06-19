@@ -40,7 +40,7 @@ class Scanner(object):
 
 
   tokens = [ "AND", "EQ", "FLOAT", "GE", "ID", "INTEGER", "LE", "NEQ", "OR",
-             "SHL", "SHR", "STRING", "TYPE",  ] + list(reserved.values())
+             "SHL", "SHR", "CHAR", "TYPE",  ] + list(reserved.values())
            
 
   t_ignore = ' \t\f'
@@ -76,7 +76,7 @@ class Scanner(object):
       r"\d+"
       return t
   
-  def t_STRING(self,t):
+  def t_CHAR(self,t):
       r'\"([^\\\n]|(\\.))*?\"'
       return t
   
@@ -90,7 +90,7 @@ class Scanner(object):
 
 
   def t_TYPE(self,t):
-      r"\b(int|float|string)\b"
+      r"\b(int|float|char)\b"
       return t
   
   def t_ID(self,t):

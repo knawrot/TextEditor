@@ -33,11 +33,11 @@ class OperationsTable:
         self.addOperation('>','int','int','int')
         self.addOperation('<=','int','int','int')
         self.addOperation('>=','int','int','int')
-        self.addOperation('==','string','string','int')
-        self.addOperation('!=','string','string','int')
-        self.addOperation('<','string','string','int')
-        self.addOperation('>','string','string','int')
-        self.addOperation('*','string','int','string')
+        self.addOperation('==','char','char','int')
+        self.addOperation('!=','char','char','int')
+        self.addOperation('<','char','char','int')
+        self.addOperation('>','char','char','int')
+        self.addOperation('*','char','int','char')
 
     def addOperation(self, op, left, right, result):
         if not op in self.type: self.type[op] = {}

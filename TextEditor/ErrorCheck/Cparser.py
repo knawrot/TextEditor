@@ -177,9 +177,9 @@ class Cparser(object):
           """const : FLOAT"""
           p[0] = AST.Float(p[1], p.lineno(1))
 
-     def p_const_string(self, p):
-          """const : STRING"""
-          p[0] = AST.String(p[1], p.lineno(1))
+     def p_const_char(self, p):
+          """const : CHAR"""
+          p[0] = AST.Char(p[1], p.lineno(1))
 
      def p_expression(self, p):
           """expression : const
