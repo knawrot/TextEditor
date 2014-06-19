@@ -73,6 +73,9 @@ public class ModelImpl implements Model {
 					for(int i = 1; i < splitTmp.length; i++) {
 						symbolTable.add(splitTmp[i].split(",")[0]);
 					}
+				} else if(tmp.startsWith("Illegal character")) {
+					splitTmp = tmp.split(" in line ");
+					errorReport.add(splitTmp[1] + ":" + splitTmp[0]);
 				}
 			}
 		} catch (NumberFormatException e) {

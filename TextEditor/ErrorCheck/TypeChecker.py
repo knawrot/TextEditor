@@ -25,7 +25,7 @@ class TypeChecker:
     @staticmethod
     def typesCoherent(should, beType):
         if __debug__: print "should",should," | ","beType", beType
-        return beType == should or (beType == 'float' and should=='int')
+        return beType == should or (beType == 'float' and should == 'int')
 		
     def analyzeDeclarations(self, declarationsList):
         if __debug__: print "analyzing Declarations..."
@@ -39,14 +39,14 @@ class TypeChecker:
                     try:
                         self.symbolTable.put(var.left, VariableSymbol(var.left, Type, var))
                     except Exception:
-                        self.raiseError(str(var.lineno)+":Podwójna deklaracja \""+var.left+"\", poprzednia deklaracja w linii"+str(self.symbolTable.get(var.left).lineno())+".")
+                        self.raiseError("(linia "+str(var.lineno)+"): Podwójna deklaracja \""+var.left+"\", poprzednia deklaracja w linii "+str(self.symbolTable.get(var.left).lineno())+".")
 
     def analyzeFunDeclarations(self, declarationsList):
         if __debug__: print "analyzing FunDeclarations..."
         for funDef in declarationsList:
             self.symbolTable.put(funDef.ident, FunctionSymbol(funDef.ident, funDef.typ, funDef.args, funDef))
             if funDef.accept(self) is None:
-                self.raiseError(str(var.lineno)+":B³êdy w definicji funkcji "+funDef.ident+".")
+                self.raiseError("(linia "+str(var.lineno)+"): B³êdy w definicji funkcji "+funDef.ident+".")
 
     def analyzeInstrBlock(self, block):
         if __debug__: print "analyzing InstrBlock..."
@@ -148,10 +148,11 @@ class TypeChecker:
         Type = variable.typ
         result = True
         for var in variable.variables:
-            valueType = var.right.accept(self)
-            if not TypeChecker.typesCoherent(should=valueType,beType=Type):
-                self.raiseError(str(var.lineno)+":Niekompatybilna inicjacja zmiennej "+var.left+", wymagany "+Type+", znaleziony "+valueType)
-                result = False
+            if var.right is not None:
+                valueType = var.right.accept(self)
+                if not TypeChecker.typesCoherent(should=valueType,beType=Type):
+                    self.raiseError(str(var.lineno)+":Niekompatybilna inicjacja zmiennej "+var.left+", wymagany "+Type+", znaleziony "+valueType)
+                    result = False
         return result
 
     def visit_Float(self, var):

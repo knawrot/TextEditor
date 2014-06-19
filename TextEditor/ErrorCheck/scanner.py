@@ -60,7 +60,7 @@ class Scanner(object):
 
 
   def t_LINE_COMMENT(self,t):
-      r'\#.*'
+      r'//.*'
       pass
 
   def t_BLOCK_COMMENT(self,t):

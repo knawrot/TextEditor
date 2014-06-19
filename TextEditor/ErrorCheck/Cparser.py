@@ -58,8 +58,7 @@ class Cparser(object):
                           
      
      def p_declaration(self, p):
-          """declaration : TYPE inits ';' 
-                            | error ';' """
+          """declaration : TYPE inits ';'"""
           if len(p) > 3:
                p[0] = AST.Variable(p[1], p[2], p.lineno(1))
 
@@ -74,8 +73,12 @@ class Cparser(object):
 
 
      def p_init(self, p):
-          """init : ID '=' expression """
-          p[0] = AST.Declaration(p[1], p[2], p[3], p.lineno(1))
+          """init : ID '=' expression
+                     | ID """
+          if len(p) > 3:
+              p[0] = AST.Declaration(p[1], p[2], p[3], p.lineno(1))
+          else:
+              p[0] = AST.Declaration(p[1], None, None, p.lineno(1))
 
 
      
