@@ -96,8 +96,9 @@ public class TextEditorFrame extends JFrame implements View {
 		mainTextPane.setFont(EDITOR_FONT);
 		
 		functionsDefinition.setEditable(false);
+		functionsDefinition.setFont(KEYWORD_FONT);
 		functionsDefinition.setBackground(FUNTION_DEFINITIONS_PANEL_COLOR);
-		functionsDefinition.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));;
+		functionsDefinition.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
 	}
 
 	@Override

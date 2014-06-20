@@ -258,7 +258,7 @@ public class Controller {
 		StringBuilder builder = new StringBuilder();
 		for (String string : list) {
 			String functionName = string.substring(0, string.indexOf(':'));
-			String functionRetValue = string.substring(string.lastIndexOf(':'), string.length());
+			String functionRetValue = string.substring(string.lastIndexOf(':')+1, string.length());
 			builder.append(functionName + "(): " + functionRetValue + "\n");
 		}
 		
