@@ -70,9 +70,11 @@ public class ModelImpl implements Model {
 					errorReport.add("1:Niepoprawna sk³adnia programu");
 				} else if(tmp.startsWith("symbolTable")) {
 					splitTmp = tmp.split("': ");
-					for(int i = 1; i < splitTmp.length; i++) {
+					int i;
+					for(i = 1; i < splitTmp.length - 1; i++) {
 						symbolTable.add(splitTmp[i].split(",")[0]);
 					}
+					symbolTable.add(splitTmp[i].split("}")[0].split(",")[0]);
 				} else if(tmp.startsWith("Illegal character")) {
 					splitTmp = tmp.split(" in line ");
 					errorReport.add(splitTmp[1] + ":" + splitTmp[0]);

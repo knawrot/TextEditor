@@ -23,7 +23,7 @@ class Scanner(object):
 
 
 
-  literals = "{}()<>=;:,+-*/%&|^"
+  literals = "{}()<>=;:,+-*/%&|^#."
 
 
   reserved = {
@@ -58,6 +58,9 @@ class Scanner(object):
       print("Illegal character '{0}' ({1}) in line {2}".format(t.value[0], hex(ord(t.value[0])), t.lexer.lineno))
       t.lexer.skip(1)
 
+  def t_INCLUDE(self,t):
+      r'\#include.*'
+      pass
 
   def t_LINE_COMMENT(self,t):
       r'//.*'
