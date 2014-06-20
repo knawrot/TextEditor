@@ -4,13 +4,16 @@ import java.io.File;
 import java.util.List;
 
 public interface Model {
-
-	void saveFile();
-
-	void saveFileAtLocation(File path);
-
-	void loadAndAnalyzeFile(File file);
+	String EMPTY_FILE_PREFIX = "new";
 	
-	List<String> getErrorReport(String text);
+	File createEmptyFile();
+	
+	void parseText(String text);
+	
+	List<String> getErrorReport();
+	
+	List<String> getSymbolTable();
+	
+	String getKeywordsRegExp();
 
 }

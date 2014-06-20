@@ -9,41 +9,39 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.texteditor.api.Model;
+import com.texteditor.api.View;
 
 public class ModelImpl implements Model {
-	//private File openedFile;
-
-	// private Map<String, Color> specificElementColor = new HashMap<>();
+	private List<String> symbolTable;
+	private List<String> errorReport;
+	private int fileNameAppender = 1;
+	private String keywordsReg;
 
 	public ModelImpl() {
-		// TODO inicjalizacja
+		symbolTable = new ArrayList<String>();
+		
+		StringBuilder buff = new StringBuilder("");
+		buff.append("(");
+		for (String keyword : View.C_KEYWORDS) {
+			buff.append("\\b").append(keyword).append("\\b").append("|");
+		}
+		buff.deleteCharAt(buff.length() - 1);
+		buff.append(")");
+		keywordsReg = buff.toString();
 	}
 
 	@Override
-	public void loadAndAnalyzeFile(File file) {
-		// TODO: odapalmy sekwencje analizy, czyli jakies "exec"'i z modelu na
-		// bisonach,
-		// parserach etc
-		// System.out.println(fileName);
-		// openedFile = file;
+	public File createEmptyFile() {
+		File file;
+		do {
+			file = new File(EMPTY_FILE_PREFIX + String.valueOf(fileNameAppender++));
+		} while (file.exists());
+		return file;
 	}
-
+	
 	@Override
-	public void saveFile() {
-		// FileWriter writer = new FileWriter(openedFile);
-		// writer.write(arg0);
-
-	}
-
-	@Override
-	public void saveFileAtLocation(File path) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public List<String> getErrorReport(String text) {
-		List<String> errorReport = null;
+	public void parseText(String text) {
+		symbolTable.clear();
 		
 		try {
 			Process proc = Runtime.getRuntime().exec("python -O ErrorCheck/main.py");
@@ -54,21 +52,48 @@ public class ModelImpl implements Model {
 					new InputStreamReader(proc.getInputStream()));
 			errorReport = new ArrayList<String>();
 			String tmp = null;
+			String[] splitTmp = null;
 			while((tmp = br.readLine()) != null) {
 				if(tmp.startsWith("(linia ")) {
-					String[] splitTmp = tmp.split("\\): ");
+					splitTmp = tmp.split("\\): ");
 					errorReport.add(Integer.parseInt(splitTmp[0].substring(7)) + ":" + splitTmp[1]);
+				} else if(tmp.startsWith("Syntax error at line ")) {
+					splitTmp = tmp.split(" at line ");
+					splitTmp = splitTmp[1].split(", column [0-9]+: ");
+					errorReport.add(Integer.parseInt(splitTmp[0]) + ":" + 
+							"B³¹d sk³adniowy, niespodziewane wyst¹pienie symbolu '" + splitTmp[1].split("'")[1] + "'");
+				} else if(tmp.equals("At end of input")) {
+					errorReport.add("1:Niepoprawna sk³adnia programu");
+				} else if(tmp.startsWith("symbolTable")) {
+					splitTmp = tmp.split("': ");
+					for(int i = 1; i < splitTmp.length; i++) {
+						symbolTable.add(splitTmp[i].split(",")[0]);
+					}
+				} else if(tmp.startsWith("Illegal character")) {
+					splitTmp = tmp.split(" in line ");
+					errorReport.add(splitTmp[1] + ":" + splitTmp[0]);
 				}
 			}
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
-			return null;
 		} catch (IOException e) {
 			e.printStackTrace();
-			return null;
 		}
+	}
 
+	@Override
+	public List<String> getErrorReport() {		
 		return errorReport;
+	}
+	
+	@Override
+	public List<String> getSymbolTable() {
+		return symbolTable;
+	}
+	
+	@Override
+	public String getKeywordsRegExp() {
+		return keywordsReg;
 	}
 
 }
