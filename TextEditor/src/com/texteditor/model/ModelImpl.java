@@ -9,42 +9,39 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.texteditor.api.Model;
+import com.texteditor.api.View;
 
 public class ModelImpl implements Model {
-	//private File openedFile;
-
-	// private Map<String, Color> specificElementColor = new HashMap<>();
 	private List<String> symbolTable;
-
-	public ModelImpl() {
+	private List<String> errorReport;
+	private int fileNameAppender = 1;
+	private String keywordsReg;
+	
+		public ModelImpl() {
 		symbolTable = new ArrayList<String>();
+		
+		StringBuilder buff = new StringBuilder("");
+		buff.append("(");
+		for (String keyword : View.C_KEYWORDS) {
+			buff.append("\\b").append(keyword).append("\\b").append("|");
+		}
+		buff.deleteCharAt(buff.length() - 1);
+		buff.append(")");
+		keywordsReg = buff.toString();
 	}
 
 	@Override
-	public void loadAndAnalyzeFile(File file) {
-		// TODO: odapalmy sekwencje analizy, czyli jakies "exec"'i z modelu na
-		// bisonach,
-		// parserach etc
-		// System.out.println(fileName);
-		// openedFile = file;
+	public File createEmptyFile() {
+		File file;
+		do {
+			file = new File(EMPTY_FILE_PREFIX + String.valueOf(fileNameAppender++));
+		} while (file.exists());
+		return file;
 	}
 
 	@Override
-	public void saveFile() {
-		// FileWriter writer = new FileWriter(openedFile);
-		// writer.write(arg0);
-
-	}
-
-	@Override
-	public void saveFileAtLocation(File path) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public List<String> getErrorReport(String text) {
-		List<String> errorReport = null;
+	public void parseText(String text) {
+		symbolTable.clear();
 		symbolTable.clear();
 		
 		try {
@@ -82,13 +79,24 @@ public class ModelImpl implements Model {
 			}
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
-			return null;
 		} catch (IOException e) {
 			e.printStackTrace();
-			return null;
 		}
+	}
 
+	@Override
+	public List<String> getErrorReport() {		
 		return errorReport;
+	}
+	
+	@Override
+	public List<String> getSymbolTable() {
+		return symbolTable;
+	}
+	
+	@Override
+	public String getKeywordsRegExp() {
+		return keywordsReg;
 	}
 
 }
