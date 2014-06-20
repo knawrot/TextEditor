@@ -67,7 +67,7 @@ public class ModelImpl implements Model {
 					errorReport.add(Integer.parseInt(splitTmp[0]) + ":" + 
 							"B³¹d sk³adniowy, niespodziewane wyst¹pienie symbolu '" + splitTmp[1].split("'")[1] + "'");
 				} else if(tmp.equals("At end of input")) {
-					errorReport.add("0:Niepoprawna sk³adnia programu");
+					errorReport.add("1:Niepoprawna sk³adnia programu");
 				} else if(tmp.startsWith("symbolTable")) {
 					splitTmp = tmp.split("': ");
 					for(int i = 1; i < splitTmp.length; i++) {
